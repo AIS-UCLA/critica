@@ -6,8 +6,8 @@ use super::SERVICE_NAME;
 use auth_service_api::client::AuthService;
 use std::convert::Infallible;
 use std::future::Future;
-use todo_app_service_api::response;
-use todo_app_service_api::response::TodoAppError;
+use super::response;
+use super::response::FakeJournalReaderError;
 use warp::http::StatusCode;
 use warp::Filter;
 
@@ -35,211 +35,43 @@ pub fn api(
             config.clone(),
             db.clone(),
             auth_service.clone(),
-            warp::path!("public" / "goal" / "new"),
-            handlers::goal_new,
+            warp::path!("public" / "article" / "new"),
+            handlers::article_new,
         ),
         adapter(
             config.clone(),
             db.clone(),
             auth_service.clone(),
-            warp::path!("public" / "goal_data" / "new"),
-            handlers::goal_data_new,
+            warp::path!("public" / "article_data" / "new"),
+            handlers::article_data_new,
         ),
         adapter(
             config.clone(),
             db.clone(),
             auth_service.clone(),
-            warp::path!("public" / "goal_dependency" / "new"),
-            handlers::goal_dependency_new,
+            warp::path!("public" / "article_section" / "new"),
+            handlers::article_section_new,
         ),
         adapter(
             config.clone(),
             db.clone(),
             auth_service.clone(),
-            warp::path!("public" / "goal_entity_tag" / "new"),
-            handlers::goal_entity_tag_new,
+            warp::path!("public" / "article" / "view"),
+            handlers::article_view,
         ),
         adapter(
             config.clone(),
             db.clone(),
             auth_service.clone(),
-            warp::path!("public" / "goal_event" / "new"),
-            handlers::goal_event_new,
+            warp::path!("public" / "article_data" / "view"),
+            handlers::article_data_view,
         ),
         adapter(
             config.clone(),
             db.clone(),
             auth_service.clone(),
-            warp::path!("public" / "goal_template" / "new"),
-            handlers::goal_template_new,
-        ),
-        adapter(
-            config.clone(),
-            db.clone(),
-            auth_service.clone(),
-            warp::path!("public" / "goal_template_data" / "new"),
-            handlers::goal_template_data_new,
-        ),
-        adapter(
-            config.clone(),
-            db.clone(),
-            auth_service.clone(),
-            warp::path!("public" / "goal_template_pattern" / "new"),
-            handlers::goal_template_pattern_new,
-        ),
-        adapter(
-            config.clone(),
-            db.clone(),
-            auth_service.clone(),
-            warp::path!("public" / "named_entity" / "new"),
-            handlers::named_entity_new,
-        ),
-        adapter(
-            config.clone(),
-            db.clone(),
-            auth_service.clone(),
-            warp::path!("public" / "named_entity_data" / "new"),
-            handlers::named_entity_data_new,
-        ),
-        adapter(
-            config.clone(),
-            db.clone(),
-            auth_service.clone(),
-            warp::path!("public" / "named_entity_pattern" / "new"),
-            handlers::named_entity_pattern_new,
-        ),
-        adapter(
-            config.clone(),
-            db.clone(),
-            auth_service.clone(),
-            warp::path!("public" / "user_generated_code" / "new"),
-            handlers::user_generated_code_new,
-        ),
-        adapter(
-            config.clone(),
-            db.clone(),
-            auth_service.clone(),
-            warp::path!("public" / "time_utility_function" / "new"),
-            handlers::time_utility_function_new,
-        ),
-        adapter(
-            config.clone(),
-            db.clone(),
-            auth_service.clone(),
-            warp::path!("public" / "external_event" / "new"),
-            handlers::external_event_new,
-        ),
-        adapter(
-            config.clone(),
-            db.clone(),
-            auth_service.clone(),
-            warp::path!("public" / "external_event_data" / "new"),
-            handlers::external_event_data_new,
-        ),
-        adapter(
-            config.clone(),
-            db.clone(),
-            auth_service.clone(),
-            warp::path!("public" / "goal" / "view"),
-            handlers::goal_view,
-        ),
-        adapter(
-            config.clone(),
-            db.clone(),
-            auth_service.clone(),
-            warp::path!("public" / "goal_data" / "view"),
-            handlers::goal_data_view,
-        ),
-        adapter(
-            config.clone(),
-            db.clone(),
-            auth_service.clone(),
-            warp::path!("public" / "external_event" / "view"),
-            handlers::external_event_view,
-        ),
-        adapter(
-            config.clone(),
-            db.clone(),
-            auth_service.clone(),
-            warp::path!("public" / "goal_event" / "view"),
-            handlers::goal_event_view,
-        ),
-        adapter(
-            config.clone(),
-            db.clone(),
-            auth_service.clone(),
-            warp::path!("public" / "goal_entity_tag" / "view"),
-            handlers::goal_entity_tag_view,
-        ),
-        adapter(
-            config.clone(),
-            db.clone(),
-            auth_service.clone(),
-            warp::path!("public" / "goal_dependency" / "view"),
-            handlers::goal_dependency_view,
-        ),
-        adapter(
-            config.clone(),
-            db.clone(),
-            auth_service.clone(),
-            warp::path!("public" / "named_entity" / "view"),
-            handlers::named_entity_view,
-        ),
-        adapter(
-            config.clone(),
-            db.clone(),
-            auth_service.clone(),
-            warp::path!("public" / "named_entity_data" / "view"),
-            handlers::named_entity_data_view,
-        ),
-        adapter(
-            config.clone(),
-            db.clone(),
-            auth_service.clone(),
-            warp::path!("public" / "named_entity_pattern" / "view"),
-            handlers::named_entity_pattern_view,
-        ),
-        adapter(
-            config.clone(),
-            db.clone(),
-            auth_service.clone(),
-            warp::path!("public" / "goal_template" / "view"),
-            handlers::goal_template_view,
-        ),
-        adapter(
-            config.clone(),
-            db.clone(),
-            auth_service.clone(),
-            warp::path!("public" / "goal_template_data" / "view"),
-            handlers::goal_template_data_view,
-        ),
-        adapter(
-            config.clone(),
-            db.clone(),
-            auth_service.clone(),
-            warp::path!("public" / "goal_template_pattern" / "view"),
-            handlers::goal_template_pattern_view,
-        ),
-        adapter(
-            config.clone(),
-            db.clone(),
-            auth_service.clone(),
-            warp::path!("public" / "external_event_data" / "view"),
-            handlers::external_event_data_view,
-        ),
-        adapter(
-            config.clone(),
-            db.clone(),
-            auth_service.clone(),
-            warp::path!("public" / "time_utility_function" / "view"),
-            handlers::time_utility_function_view,
-        ),
-        adapter(
-            config.clone(),
-            db.clone(),
-            auth_service.clone(),
-            warp::path!("public" / "user_generated_code" / "view"),
-            handlers::user_generated_code_view,
+            warp::path!("public" / "article_section" / "view"),
+            handlers::article_section_view,
         )
     )
     .recover(handle_rejection)
@@ -265,7 +97,7 @@ fn adapter<PropsType, ResponseType, F>(
     handler: fn(Config, Db, AuthService, PropsType) -> F,
 ) -> impl Filter<Extract = (impl warp::Reply,), Error = warp::Rejection> + Clone
 where
-    F: Future<Output = Result<ResponseType, TodoAppError>> + Send,
+    F: Future<Output = Result<ResponseType, FakeJournalReaderError>> + Send,
     PropsType: Send + serde::de::DeserializeOwned,
     ResponseType: Send + serde::ser::Serialize,
 {
@@ -282,7 +114,7 @@ where
         .and_then(move |config, db, auth_service, props| async move {
             handler(config, db, auth_service, props)
                 .await
-                .map_err(todo_app_error)
+                .map_err(app_error)
         })
         .map(|x| warp::reply::json(&Ok::<ResponseType, ()>(x)))
 }
@@ -295,19 +127,19 @@ async fn handle_rejection(err: warp::Rejection) -> Result<impl warp::Reply, Infa
 
     if err.is_not_found() {
         code = StatusCode::NOT_FOUND;
-        message = TodoAppError::NotFound;
+        message = FakeJournalReaderError::NotFound;
     } else if err
         .find::<warp::filters::body::BodyDeserializeError>()
         .is_some()
     {
-        message = TodoAppError::DecodeError;
+        message = FakeJournalReaderError::DecodeError;
         code = StatusCode::BAD_REQUEST;
     } else if err.find::<warp::reject::MethodNotAllowed>().is_some() {
         code = StatusCode::METHOD_NOT_ALLOWED;
-        message = TodoAppError::MethodNotAllowed;
-    } else if let Some(TodoAppErrorRejection(todo_app_error)) = err.find() {
+        message = FakeJournalReaderError::MethodNotAllowed;
+    } else if let Some(FakeJournalReaderErrorRejection(app_error)) = err.find() {
         code = StatusCode::BAD_REQUEST;
-        message = todo_app_error.clone();
+        message = app_error.clone();
     } else {
         // We should have expected this... Just log and say its a 500
         utils::log(utils::Event {
@@ -316,11 +148,11 @@ async fn handle_rejection(err: warp::Rejection) -> Result<impl warp::Reply, Infa
             severity: utils::SeverityKind::Error,
         });
         code = StatusCode::INTERNAL_SERVER_ERROR;
-        message = TodoAppError::Unknown;
+        message = FakeJournalReaderError::Unknown;
     }
 
     Ok(warp::reply::with_status(
-        warp::reply::json(&Err::<(), TodoAppError>(message)),
+        warp::reply::json(&Err::<(), FakeJournalReaderError>(message)),
         code,
     ))
 }
@@ -328,9 +160,9 @@ async fn handle_rejection(err: warp::Rejection) -> Result<impl warp::Reply, Infa
 // This type represents errors that we can generate
 // These will be automatically converted to a proper string later
 #[derive(Debug)]
-pub struct TodoAppErrorRejection(pub TodoAppError);
-impl warp::reject::Reject for TodoAppErrorRejection {}
+pub struct FakeJournalReaderErrorRejection(pub FakeJournalReaderError);
+impl warp::reject::Reject for FakeJournalReaderErrorRejection {}
 
-fn todo_app_error(todo_app_error: TodoAppError) -> warp::reject::Rejection {
-    warp::reject::custom(TodoAppErrorRejection(todo_app_error))
+fn app_error(app_error: FakeJournalReaderError) -> warp::reject::Rejection {
+    warp::reject::custom(FakeJournalReaderErrorRejection(app_error))
 }

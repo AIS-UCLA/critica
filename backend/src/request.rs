@@ -6,7 +6,7 @@ use strum::AsRefStr;
 #[serde(rename_all = "camelCase")]
 pub struct ArticleNewProps {
   pub title: String,
-  pub duration_estimate: Option<i64>,
+  pub duration_estimate: i64,
   pub api_key: String,
 }
 
@@ -15,7 +15,7 @@ pub struct ArticleNewProps {
 pub struct ArticleDataNewProps {
   pub article_id: i64,
   pub title: String,
-  pub duration_estimate: Option<i64>,
+  pub duration_estimate: i64,
   pub active: bool,
   pub api_key: String,
 }
@@ -25,8 +25,9 @@ pub struct ArticleDataNewProps {
 pub struct ArticleSectionNewProps {
   pub article_id: i64,
   pub position: i64,
-  pub variant: bool,
+  pub variant: i64,
   pub section_text: String,
+  pub active: bool,
   pub api_key: String,
 }
 

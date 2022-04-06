@@ -10,28 +10,20 @@ mod utils;
 
 use auth_service_api::client::AuthService;
 
+// response and request
+mod request;
+mod response;
+
 // db web stuff
-mod external_event_data_service;
-mod external_event_service;
-mod goal_data_service;
-mod goal_event_service;
-mod goal_service;
-mod goal_dependency_service;
-mod goal_entity_tag_service;
-mod goal_template_data_service;
-mod goal_template_pattern_service;
-mod goal_template_service;
-mod named_entity_data_service;
-mod named_entity_pattern_service;
-mod named_entity_service;
-mod time_utility_function_service;
-mod user_generated_code_service;
+mod article_data_service;
+mod article_section_service;
+mod article_service;
 
 mod api;
 mod db_types;
 mod handlers;
 
-static SERVICE_NAME: &str = "todo-app-service";
+static SERVICE_NAME: &str = "fake-journal-reader-service";
 
 #[derive(Parser, Clone)]
 struct Opts {

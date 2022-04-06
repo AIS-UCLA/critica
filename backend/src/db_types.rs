@@ -12,7 +12,7 @@ pub struct ArticleData {
   pub creator_user_id: i64,
   pub article_id: i64,
   pub title: String,
-  pub duration_estimate: Option<i64>,
+  pub duration_estimate: i64,
   pub active: bool,
 }
 
@@ -24,6 +24,7 @@ pub struct ArticleSection {
   pub article_id: i64,
   pub position: i64,
   pub variant: i64,
+  pub section_text: String,
   pub active: bool,
 }
 

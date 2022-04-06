@@ -47,7 +47,7 @@ create table article_section(
   creator_user_id bigint not null,
   article_id bigint not null references article(article_id),
   position bigint not null,
-  correct bool not null,
+  variant bigint not null,
   section_text text not null,
   active bool not null
 );

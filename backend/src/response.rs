@@ -5,20 +5,11 @@ use super::request;
 
 #[derive(Clone, Debug, Serialize, Deserialize, AsRefStr)]
 #[serde(rename_all = "SCREAMING_SNAKE_CASE")]
-pub enum TodoAppError {
+pub enum FakeJournalReaderError {
   NoCapability,
-  GoalNonexistent,
-  GoalEventNonexistent,
-  GoalTemplateNonexistent,
-  GoalDependencyNonexistent,
-  ExternalEventNonexistent,
-  NamedEntityNonexistent,
-  UserGeneratedCodeNonexistent,
-  TimeUtilityFunctionNonexistent,
-  TimeUtilityFunctionNotValid,
-  NegativeStartTime,
+  ArticleNonexistent,
+  ArticleSectionNonexistent,
   NegativeDuration,
-  GoalDependencyFormsCycle,
   DecodeError,
   InternalServerError,
   MethodNotAllowed,
@@ -29,13 +20,13 @@ pub enum TodoAppError {
   Unknown,
 }
 
-impl std::fmt::Display for TodoAppError {
+impl std::fmt::Display for FakeJournalReaderError {
   fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
     write!(f, "{}", self.as_ref())
   }
 }
 
-impl std::error::Error for TodoAppError {}
+impl std::error::Error for FakeJournalReaderError {}
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]

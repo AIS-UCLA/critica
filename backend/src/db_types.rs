@@ -23,8 +23,7 @@ pub struct ArticleSection {
   pub creator_user_id: i64,
   pub article_id: i64,
   pub position: i64,
-  pub correct: bool,
-  pub section_text: String,
+  pub variant: i64,
   pub active: bool,
 }
 

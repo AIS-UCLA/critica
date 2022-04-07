@@ -1,14 +1,12 @@
 import { Row, Container, Col } from 'react-bootstrap';
 import { Async, AsyncProps } from 'react-async';
 import update from 'immutability-helper';
-import { Loader, Section } from '@innexgo/common-react-components';
+import { Section, Loader, BrandedComponentProps } from '@innexgo/common-react-components';
 import ErrorMessage from '../components/ErrorMessage';
-import DashboardLayout from '../components/DashboardLayout';
+import ExternalLayout from '../components/ExternalLayout';
 
-import {AuthenticatedComponentProps} from '@innexgo/auth-react-components';
-
-function Dashboard(props: AuthenticatedComponentProps) {
-  return <DashboardLayout {...props}>
+function ArticleSearch(props: BrandedComponentProps) {
+  return <ExternalLayout branding={props.branding} fixed={true} transparentTop={true}>
     <Container fluid className="py-4 px-4">
       <Row className="justify-content-md-center">
         <Col md={8}>
@@ -18,7 +16,7 @@ function Dashboard(props: AuthenticatedComponentProps) {
         </Col>
       </Row>
     </Container>
-  </DashboardLayout>
+  </ExternalLayout>
 }
 
-export default Dashboard;
+export default ArticleSearch;

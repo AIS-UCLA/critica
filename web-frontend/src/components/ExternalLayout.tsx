@@ -81,8 +81,8 @@ class ExternalHeader extends React.Component<ExternalHeaderProps, ExternalHeader
             </button>
             <div className="collapse navbar-collapse"
               id="navbarSupportedContent">
-              <div className="navbar-nav ml-auto">
-                <a style={linkStyle} className="nav-item nav-link font-weight-bold" href="/instructions">Instructions</a>
+              <div className="navbar-nav ms-auto">
+                <a style={linkStyle} className="nav-item nav-link font-weight-bold" href="/articles">Articles</a>
                 <a style={linkStyle} className="nav-item nav-link font-weight-bold" href="/dashboard">Login</a>
                 <a style={linkStyle} className="nav-item nav-link font-weight-bold" href="/register">Register</a>
               </div>
@@ -117,7 +117,7 @@ const ExternalLayout: React.FC<ExternalLayoutProps> = (props) =>
           {props.branding.name}
         </Navbar.Brand>
         {props.branding.copyrightOrg ?
-          <Nav className="mr-auto">
+          <Nav className="me-auto">
             <Nav.Link>&copy; {props.branding.copyrightOrg}, 2021</Nav.Link>
           </Nav>
           : false

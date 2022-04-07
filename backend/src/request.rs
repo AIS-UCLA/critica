@@ -1,6 +1,4 @@
 use serde::{Deserialize, Serialize};
-use std::convert::TryFrom;
-use strum::AsRefStr;
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -70,5 +68,32 @@ pub struct ArticleSectionViewProps {
   pub active: Option<bool>,
   pub only_recent: bool,
   pub api_key: String,
+}
+
+// PUBLIC METHODS
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct ArticleDataPublicViewProps {
+  pub article_data_id: Option<Vec<i64>>,
+  pub min_creation_time: Option<i64>,
+  pub max_creation_time: Option<i64>,
+  pub creator_user_id: Option<Vec<i64>>,
+  pub article_id: Option<Vec<i64>>,
+  pub title: Option<Vec<String>>,
+  pub min_duration_estimate: Option<i64>,
+  pub max_duration_estimate: Option<i64>,
+}
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct ArticleSectionPublicViewProps {
+  pub article_section_id: Option<Vec<i64>>,
+  pub min_creation_time: Option<i64>,
+  pub max_creation_time: Option<i64>,
+  pub creator_user_id: Option<Vec<i64>>,
+  pub article_id: Option<Vec<i64>>,
+  pub position: Option<Vec<i64>>,
+  pub variant: Option<Vec<i64>>,
 }
 

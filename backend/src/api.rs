@@ -72,6 +72,20 @@ pub fn api(
             auth_service.clone(),
             warp::path!("public" / "article_section" / "view"),
             handlers::article_section_view,
+        ),
+        adapter(
+            config.clone(),
+            db.clone(),
+            auth_service.clone(),
+            warp::path!("public" / "article_data" / "public_view"),
+            handlers::article_data_public_view,
+        ),
+        adapter(
+            config.clone(),
+            db.clone(),
+            auth_service.clone(),
+            warp::path!("public" / "article_section" / "public_view"),
+            handlers::article_section_public_view,
         )
     )
     .recover(handle_rejection)

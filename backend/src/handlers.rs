@@ -328,3 +328,81 @@ pub async fn article_section_view(
   Ok(resp_article_sections)
 }
 
+
+pub async fn article_data_public_view(
+  _config: Config,
+  db: Db,
+  _: AuthService,
+  props: request::ArticleDataPublicViewProps,
+) -> Result<Vec<response::ArticleData>, response::FakeJournalReaderError> {
+
+  // rearrange props
+  let props = request::ArticleDataViewProps {
+    article_data_id: props.article_data_id,
+    min_creation_time: props.min_creation_time,
+    max_creation_time: props.max_creation_time,
+    creator_user_id: props.creator_user_id,
+    article_id: props.article_id,
+    title: props.title,
+    min_duration_estimate: props.min_duration_estimate,
+    max_duration_estimate: props.max_duration_estimate,
+    active: Some(true),
+    only_recent: true,
+    api_key: String::from(""),
+  };
+
+  let con = &mut *db.lock().await;
+  // get users
+  let article_data = article_data_service::query(con, props)
+    .await
+    .map_err(report_postgres_err)?;
+
+  // return article_datas
+  let mut resp_article_datas = vec![];
+  for u in article_data
+    .into_iter()
+  {
+    resp_article_datas.push(fill_article_data(con, u).await?);
+  }
+
+
+  Ok(resp_article_datas)
+}
+
+pub async fn article_section_public_view(
+  _config: Config,
+  db: Db,
+  _: AuthService,
+  props: request::ArticleSectionPublicViewProps,
+) -> Result<Vec<response::ArticleSection>, response::FakeJournalReaderError> {
+  let con = &mut *db.lock().await;
+
+  let props = request::ArticleSectionViewProps {
+    article_section_id: props.article_section_id,
+    min_creation_time: props.min_creation_time,
+    max_creation_time: props.max_creation_time,
+    creator_user_id: props.creator_user_id,
+    article_id: props.article_id,
+    position: props.position,
+    variant: props.variant,
+    active: Some(true),
+    only_recent: true,
+    api_key: String::from(""),
+};
+
+  // get users
+  let article_section = article_section_service::query(con, props)
+    .await
+    .map_err(report_postgres_err)?;
+
+  // return article_sections
+  let mut resp_article_sections = vec![];
+  for u in article_section
+    .into_iter()
+  {
+    resp_article_sections.push(fill_article_section(con, u).await?);
+  }
+
+
+  Ok(resp_article_sections)
+}

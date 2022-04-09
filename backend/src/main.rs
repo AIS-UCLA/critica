@@ -23,7 +23,7 @@ mod api;
 mod db_types;
 mod handlers;
 
-static SERVICE_NAME: &str = "fake-journal-reader-service";
+static SERVICE_NAME: &str = "critica-service";
 
 #[derive(Parser, Clone)]
 struct Opts {

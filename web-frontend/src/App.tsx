@@ -60,8 +60,8 @@ function App() {
   };
 
   const branding = {
-    name: "LifeSketch",
-    tagline: "Optimize your day.",
+    name: "Critica",
+    tagline: "Compare GPT3 paragraphs against human ones.",
     homeUrl: "/",
     registerUrl: "/register",
     tosUrl: "/terms_of_service",
@@ -74,8 +74,6 @@ function App() {
 
   return <BrowserRouter>
     <Routes>
-
-
       {/* Our home page */}
       <Route path="/" element={<Home branding={branding} />} />
 
@@ -89,7 +87,6 @@ function App() {
       {/* Public Article View and Search */}
       <Route path="/article_search" element={<ArticleSearch  branding={branding} />} />
       <Route path="/article_view" element={<ArticleView branding={branding} />} />
-
 
       {/* Requires you to be logged in */}
       <Route path="/dashboard" element={<AuthenticatedComponentRenderer branding={branding} {...apiKeyGetSetter} component={Dashboard} />} />

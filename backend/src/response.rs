@@ -1,11 +1,9 @@
 use serde::{Deserialize, Serialize};
 use strum::AsRefStr;
 
-use super::request;
-
 #[derive(Clone, Debug, Serialize, Deserialize, AsRefStr)]
 #[serde(rename_all = "SCREAMING_SNAKE_CASE")]
-pub enum FakeJournalReaderError {
+pub enum AppError {
   NoCapability,
   ArticleNonexistent,
   ArticleSectionNonexistent,
@@ -21,13 +19,13 @@ pub enum FakeJournalReaderError {
   Unknown,
 }
 
-impl std::fmt::Display for FakeJournalReaderError {
+impl std::fmt::Display for AppError {
   fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
     write!(f, "{}", self.as_ref())
   }
 }
 
-impl std::error::Error for FakeJournalReaderError {}
+impl std::error::Error for AppError {}
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]

@@ -45,7 +45,6 @@ function Home(props: BrandedComponentProps) {
   };
 
   const bodyText = {
-    fontWeight: "lighter" as "lighter",
     marginBottom: "25px",
     lineHeight: "25px",
   };
@@ -91,12 +90,7 @@ function Home(props: BrandedComponentProps) {
         <Container style={{ paddingBottom: '30px' }}>
           <Section id="welcome" name={`Welcome to ${props.branding.name}`} >
             <div style={{ paddingBottom: '20px' }}>
-              As college students, we understand, firsthand, the difficulties of creating schedules. Whether it be planning out your classes, extracurriculars,
-              or shifts, the time and effort one must put into schedule planning becomes quite significant. That's why we set out design an app that
-              not only organizes your schedule, but also sorts your events by importance to ensure the most urgent of tasks are finished faster and
-              more efficiently than ever. Meet {props.branding.name}, your one stop shop for simple, yet effective schedule planning. {props.branding.name} uses an advanced
-              algorithm trained to ensure that your most urgent tasks are prioritized. That way, you can leave the schedule planning to us, confident that
-              your priorities will be met. {props.branding.name}, when your schedule feels like spam, it's time to make a plan.
+              Read better.
             </div>
           </Section>
 

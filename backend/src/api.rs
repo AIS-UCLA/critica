@@ -7,7 +7,7 @@ use auth_service_api::client::AuthService;
 use std::convert::Infallible;
 use std::future::Future;
 use super::response;
-use super::response::FakeJournalReaderError;
+use super::response::AppError;
 use warp::http::StatusCode;
 use warp::Filter;
 
@@ -111,7 +111,7 @@ fn adapter<PropsType, ResponseType, F>(
     handler: fn(Config, Db, AuthService, PropsType) -> F,
 ) -> impl Filter<Extract = (impl warp::Reply,), Error = warp::Rejection> + Clone
 where
-    F: Future<Output = Result<ResponseType, FakeJournalReaderError>> + Send,
+    F: Future<Output = Result<ResponseType, AppError>> + Send,
     PropsType: Send + serde::de::DeserializeOwned,
     ResponseType: Send + serde::ser::Serialize,
 {
@@ -141,17 +141,17 @@ async fn handle_rejection(err: warp::Rejection) -> Result<impl warp::Reply, Infa
 
     if err.is_not_found() {
         code = StatusCode::NOT_FOUND;
-        message = FakeJournalReaderError::NotFound;
+        message = AppError::NotFound;
     } else if err
         .find::<warp::filters::body::BodyDeserializeError>()
         .is_some()
     {
-        message = FakeJournalReaderError::DecodeError;
+        message = AppError::DecodeError;
         code = StatusCode::BAD_REQUEST;
     } else if err.find::<warp::reject::MethodNotAllowed>().is_some() {
         code = StatusCode::METHOD_NOT_ALLOWED;
-        message = FakeJournalReaderError::MethodNotAllowed;
-    } else if let Some(FakeJournalReaderErrorRejection(app_error)) = err.find() {
+        message = AppError::MethodNotAllowed;
+    } else if let Some(AppErrorRejection(app_error)) = err.find() {
         code = StatusCode::BAD_REQUEST;
         message = app_error.clone();
     } else {
@@ -162,11 +162,11 @@ async fn handle_rejection(err: warp::Rejection) -> Result<impl warp::Reply, Infa
             severity: utils::SeverityKind::Error,
         });
         code = StatusCode::INTERNAL_SERVER_ERROR;
-        message = FakeJournalReaderError::Unknown;
+        message = AppError::Unknown;
     }
 
     Ok(warp::reply::with_status(
-        warp::reply::json(&Err::<(), FakeJournalReaderError>(message)),
+        warp::reply::json(&Err::<(), AppError>(message)),
         code,
     ))
 }
@@ -174,9 +174,9 @@ async fn handle_rejection(err: warp::Rejection) -> Result<impl warp::Reply, Infa
 // This type represents errors that we can generate
 // These will be automatically converted to a proper string later
 #[derive(Debug)]
-pub struct FakeJournalReaderErrorRejection(pub FakeJournalReaderError);
-impl warp::reject::Reject for FakeJournalReaderErrorRejection {}
+pub struct AppErrorRejection(pub AppError);
+impl warp::reject::Reject for AppErrorRejection {}
 
-fn app_error(app_error: FakeJournalReaderError) -> warp::reject::Rejection {
-    warp::reject::custom(FakeJournalReaderErrorRejection(app_error))
+fn app_error(app_error: AppError) -> warp::reject::Rejection {
+    warp::reject::custom(AppErrorRejection(app_error))
 }

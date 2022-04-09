@@ -167,6 +167,20 @@ dependencies = [
 ]
 
 [[package]]
+name = "critica-service"
+version = "0.1.0"
+dependencies = [
+ "auth-service-api",
+ "clap",
+ "serde",
+ "serde_json",
+ "strum 0.24.0",
+ "tokio",
+ "tokio-postgres",
+ "warp",
+]
+
+[[package]]
 name = "crypto-common"
 version = "0.1.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -203,20 +217,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "9852635589dc9f9ea1b6fe9f05b50ef208c85c834a562f0c6abb1c475736ec2b"
 dependencies = [
  "cfg-if",
-]
-
-[[package]]
-name = "fake-journal-reader-backend"
-version = "0.1.0"
-dependencies = [
- "auth-service-api",
- "clap",
- "serde",
- "serde_json",
- "strum 0.24.0",
- "tokio",
- "tokio-postgres",
- "warp",
 ]
 
 [[package]]

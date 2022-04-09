@@ -5,12 +5,15 @@ import { Section, Loader, BrandedComponentProps } from '@innexgo/common-react-co
 import ErrorMessage from '../components/ErrorMessage';
 import ExternalLayout from '../components/ExternalLayout';
 
+
+
+
 function ArticleSearch(props: BrandedComponentProps) {
-  return <ExternalLayout branding={props.branding} fixed={true} transparentTop={true}>
+  return <ExternalLayout branding={props.branding} fixed={false} transparentTop={true}>
     <Container fluid className="py-4 px-4">
       <Row className="justify-content-md-center">
         <Col md={8}>
-          <Section id="goalIntents" name="My Goals">
+          <Section id="articles" name="Articles">
             Test Text
           </Section>
         </Col>

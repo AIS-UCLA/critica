@@ -1,5 +1,5 @@
-CREATE DATABASE fake_journal_reader;
-\c fake_journal_reader
+CREATE DATABASE critica;
+\c critica;
 
 -- Table Structure
 -- Primary Key
@@ -8,9 +8,9 @@ CREATE DATABASE fake_journal_reader;
 -- Everything else
 
 drop table if exists article cascade;
-create table goal(
+create table article(
   article_id bigserial primary key,
-  creation_time bigint not null,
+  creation_time bigint not null default extract(epoch from now()) * 1000,
   creator_user_id bigint not null
 );
 
@@ -18,7 +18,7 @@ create table goal(
 drop table if exists article_data cascade;
 create table article_data(
   article_data_id bigserial primary key,
-  creation_time bigint not null,
+  creation_time bigint not null default extract(epoch from now()) * 1000,
   creator_user_id bigint not null,
   article_id bigint not null references article(article_id),
   -- article title
@@ -43,7 +43,7 @@ create view recent_article_data as
 drop table if exists article_section cascade;
 create table article_section(
   article_section_id bigserial primary key,
-  creation_time bigint not null,
+  creation_time bigint not null default extract(epoch from now()) * 1000,
   creator_user_id bigint not null,
   article_id bigint not null references article(article_id),
   position bigint not null,

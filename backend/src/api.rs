@@ -77,14 +77,14 @@ pub fn api(
             config.clone(),
             db.clone(),
             auth_service.clone(),
-            warp::path!("public" / "article_data" / "public_view"),
+            warp::path!("public" / "article_data" / "view_public"),
             handlers::article_data_public_view,
         ),
         adapter(
             config.clone(),
             db.clone(),
             auth_service.clone(),
-            warp::path!("public" / "article_section" / "public_view"),
+            warp::path!("public" / "article_section" / "view_public"),
             handlers::article_section_public_view,
         )
     )

@@ -100,7 +100,7 @@ pub async fn query(
     " AND ($6::text[]    IS NULL OR ad.title = ANY($6))",
     " AND ($7::bigint    IS NULL OR ad.duration_estimate >= $7)",
     " AND ($8::bigint    IS NULL OR ad.duration_estimate <= $8)",
-    " AND ($9::bool     IS NULL OR ad.active = $9)",
+    " AND ($9::bool      IS NULL OR ad.active = $9)",
     " ORDER BY ad.article_data_id",
   ]
   .join("\n");

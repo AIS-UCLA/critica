@@ -74,7 +74,7 @@ pub struct ArticleSectionViewProps {
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct ArticleDataPublicViewProps {
+pub struct ArticleDataViewPublicProps {
   pub article_data_id: Option<Vec<i64>>,
   pub min_creation_time: Option<i64>,
   pub max_creation_time: Option<i64>,
@@ -87,7 +87,7 @@ pub struct ArticleDataPublicViewProps {
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct ArticleSectionPublicViewProps {
+pub struct ArticleSectionViewPublicProps {
   pub article_section_id: Option<Vec<i64>>,
   pub min_creation_time: Option<i64>,
   pub max_creation_time: Option<i64>,

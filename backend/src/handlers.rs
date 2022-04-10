@@ -333,7 +333,7 @@ pub async fn article_data_public_view(
   _config: Config,
   db: Db,
   _: AuthService,
-  props: request::ArticleDataPublicViewProps,
+  props: request::ArticleDataViewPublicProps,
 ) -> Result<Vec<response::ArticleData>, response::AppError> {
 
   // rearrange props
@@ -373,7 +373,7 @@ pub async fn article_section_public_view(
   _config: Config,
   db: Db,
   _: AuthService,
-  props: request::ArticleSectionPublicViewProps,
+  props: request::ArticleSectionViewPublicProps,
 ) -> Result<Vec<response::ArticleSection>, response::AppError> {
   let con = &mut *db.lock().await;
 

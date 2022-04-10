@@ -1,92 +1,51 @@
-import { Row, Container, Col } from 'react-bootstrap';
+import { Card, Row, Container, Col } from 'react-bootstrap';
 import { Async, AsyncProps } from 'react-async';
 import update from 'immutability-helper';
 import { Section, Loader, BrandedComponentProps } from '@innexgo/common-react-components';
 import ErrorMessage from '../components/ErrorMessage';
 import ExternalLayout from '../components/ExternalLayout';
 
-import {ArticleData, articleDataViewPublic} from '../utils/api';
+import { ArticleData, articleDataViewPublic } from '../utils/api';
+import { unwrap } from '@innexgo/frontend-common';
+import format from 'date-fns/format';
 
-
-type Data  = {
+type Data = {
   articleData: ArticleData[],
 }
 
-const loadDashboardData = async (props: AsyncProps<Data>) => {
-
-  const goalData =
-    await goalDataView({
-      creatorUserId: [props.apiKey.creatorUserId],
-      status: ["PENDING"],
-      onlyRecent: true,
-      apiKey: props.apiKey.key,
-    })
+const loadData = async (props: AsyncProps<Data>) => {
+  const articleData =
+    await articleDataViewPublic({})
       .then(unwrap);
 
-  const goalEvents = await goalEventView({
-    goalId: goalData.map(gd => gd.goal.goalId),
-    onlyRecent: true,
-    apiKey: props.apiKey.key,
-  })
-    .then(unwrap)
-
-
-  // join goal data to goal events
-  const data = goalData.map(gd => ({
-    gd,
-    ge: goalEvents.find(ge => ge.goal.goalId === gd.goal.goalId)
-  }));
-
-  const goalTemplateData = await goalTemplateDataView({
-    creatorUserId: [props.apiKey.creatorUserId],
-    active: true,
-    onlyRecent: true,
-    apiKey: props.apiKey.key,
-  })
-    .then(unwrap)
-
-  const namedEntityData = await namedEntityDataView({
-    creatorUserId: [props.apiKey.creatorUserId],
-    active: true,
-    onlyRecent: true,
-    apiKey: props.apiKey.key,
-  })
-    .then(unwrap)
-
-  const namedEntityPatterns = await namedEntityPatternView({
-    namedEntityId: namedEntityData.map(gtd => gtd.namedEntity.namedEntityId),
-    active: true,
-    onlyRecent: true,
-    apiKey: props.apiKey.key
-  })
-    .then(unwrap);
-
-  // group patterns by tag
-  const tags = namedEntityData.map(ned => ({
-    ned,
-    nep: namedEntityPatterns.filter(nep => nep.namedEntity.namedEntityId === ned.namedEntity.namedEntityId)
-  }));
-
-  const goalTemplatePatterns = await goalTemplatePatternView({
-    goalTemplateId: goalTemplateData.map(gtd => gtd.goalTemplate.goalTemplateId),
-    active: true,
-    onlyRecent: true,
-    apiKey: props.apiKey.key
-  })
-    .then(unwrap);
-
-  // group patterns by template
-  const templates = goalTemplateData.map(gtd => ({
-    gtd,
-    gtp: goalTemplatePatterns.filter(gtp => gtp.goalTemplate.goalTemplateId === gtd.goalTemplate.goalTemplateId)
-  }));
-
   return {
-    data,
-    tags,
-    templates,
+    articleData,
   }
 }
+
+
+type ResourceCardProps = {
+  title: string,
+  subtitle: string,
+  text: string,
+  href: string
+}
+
+function ResourceCard(props: ResourceCardProps) {
+  return (
+    <a className="text-dark" href={props.href}>
+      <Card className="h-100" style={{ width: '15rem' }}>
+        <Card.Body>
+          <Card.Title>{props.title}</Card.Title>
+          <Card.Subtitle className="text-muted">{props.subtitle}</Card.Subtitle>
+          <Card.Text>{props.text}</Card.Text>
+        </Card.Body>
+      </Card>
+    </a>
+  )
+}
+
+
 
 
 function ArticleSearch(props: BrandedComponentProps) {
@@ -95,24 +54,22 @@ function ArticleSearch(props: BrandedComponentProps) {
       <Row className="justify-content-md-center">
         <Col md={8}>
           <Section id="goalIntents" name="Articles">
-            <Async promiseFn={loadDashboardData} apiKey={props.apiKey}>
+            <Async promiseFn={loadData}>
               {({ setData }) => <>
                 <Async.Pending><Loader /></Async.Pending>
                 <Async.Rejected>
                   {e => <ErrorMessage error={e} />}
                 </Async.Rejected>
-                <Async.Fulfilled<DashboardData>>{dd =>
-                  <ManageGoalTable
-                    data={dd.data}
-                    setData={(d) => setData(update(dd, { data: { $set: d } }))}
-                    tags={dd.tags}
-                    templates={dd.templates}
-                    apiKey={props.apiKey}
-                    mutable
-                    addable
-                    showInactive={false}
-                  />
-                }</Async.Fulfilled>
+                <Async.Fulfilled<Data>>
+                  {d => d.articleData.map(a =>
+                      <ResourceCard
+                      title={a.title}
+                      subtitle={"foo"}
+                      text={`Updated ${format(a.creationTime, 'YYYY MM Do')}`}
+                      href={`/article_view?articleId=${a.article.articleId}`}
+                      />
+                  )}
+                </Async.Fulfilled>
               </>}
             </Async>
           </Section>

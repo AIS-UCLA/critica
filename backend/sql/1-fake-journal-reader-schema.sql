@@ -24,7 +24,7 @@ create table article_data(
   -- article title
   title text not null,
   -- how long is the article expected to read
-  duration_estimate text not null,
+  duration_estimate bigint not null,
   -- is the article still visible
   active bool not null
 );

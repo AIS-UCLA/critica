@@ -8,6 +8,7 @@ import ExternalLayout from '../components/ExternalLayout';
 import { ArticleData, articleDataViewPublic } from '../utils/api';
 import { unwrap } from '@innexgo/frontend-common';
 import format from 'date-fns/format';
+import formatDistance from 'date-fns/formatDistance';
 
 type Data = {
   articleData: ArticleData[],
@@ -33,48 +34,47 @@ type ResourceCardProps = {
 
 function ResourceCard(props: ResourceCardProps) {
   return (
-    <a className="text-dark" href={props.href}>
-      <Card className="h-100" style={{ width: '15rem' }}>
-        <Card.Body>
-          <Card.Title>{props.title}</Card.Title>
-          <Card.Subtitle className="text-muted">{props.subtitle}</Card.Subtitle>
-          <Card.Text>{props.text}</Card.Text>
-        </Card.Body>
-      </Card>
-    </a>
+    <Card className="h-100" style={{ width: '15rem' }}>
+      <Card.Body>
+        <Card.Title>{props.title}</Card.Title>
+        <Card.Subtitle className="text-muted">{props.subtitle}</Card.Subtitle>
+        <Card.Text>{props.text}</Card.Text>
+        <Card.Link href={props.href} className="stretched-link" />
+      </Card.Body>
+    </Card>
   )
 }
 
 
-
-
 function ArticleSearch(props: BrandedComponentProps) {
   return <ExternalLayout branding={props.branding} fixed={false} transparentTop={true}>
-    <Container fluid className="py-4 px-4">
-      <Row className="justify-content-md-center">
-        <Col md={8}>
-          <Section id="goalIntents" name="Articles">
-            <Async promiseFn={loadData}>
-              {({ setData }) => <>
-                <Async.Pending><Loader /></Async.Pending>
-                <Async.Rejected>
-                  {e => <ErrorMessage error={e} />}
-                </Async.Rejected>
-                <Async.Fulfilled<Data>>
-                  {d => d.articleData.map(a =>
+    <Container className="py-4">
+      <Section id="goalIntents" name="Articles">
+        <Async promiseFn={loadData}>
+          {({ setData }) => <>
+            <Async.Pending><Loader /></Async.Pending>
+            <Async.Rejected>
+              {e => <ErrorMessage error={e} />}
+            </Async.Rejected>
+            <Async.Fulfilled<Data>>{d =>
+              <div className="d-flex flex-wrap">
+                {
+                  d.articleData.map(a =>
+                    <div className="p-2">
                       <ResourceCard
-                      title={a.title}
-                      subtitle={"foo"}
-                      text={`Updated ${format(a.creationTime, 'YYYY MM Do')}`}
-                      href={`/article_view?articleId=${a.article.articleId}`}
+                        title={a.title}
+                        text={`Approx Length: ${formatDistance(0, a.durationEstimate)}`}
+                        subtitle={`Updated ${format(a.creationTime, 'yyyy MMM do')}`}
+                        href={`/article_view?articleId=${a.article.articleId}`}
                       />
-                  )}
-                </Async.Fulfilled>
-              </>}
-            </Async>
-          </Section>
-        </Col>
-      </Row>
+                    </div>
+                  )
+                }
+              </div>}
+            </Async.Fulfilled>
+          </>}
+        </Async>
+      </Section>
     </Container>
   </ExternalLayout>
 }

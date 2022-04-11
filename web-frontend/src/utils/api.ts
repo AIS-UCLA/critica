@@ -23,7 +23,7 @@ export interface ArticleSection {
   article: Article,
   position: number,
   variant: number,
-  section_text: String,
+  sectionText: string,
   active: boolean,
 }
 
@@ -168,6 +168,6 @@ export interface ArticleSectionViewPublicProps {
 }
 
 export function articleSectionViewPublic(props: ArticleSectionViewPublicProps, server?:string): Promise<Result<ArticleSection[], AppErrorCode>> {
-  return fetchApiOrNetworkError(undefToStr(server) + "/critica/article_section/view", props);
+  return fetchApiOrNetworkError(undefToStr(server) + "/critica/article_section/view_public", props);
 }
 

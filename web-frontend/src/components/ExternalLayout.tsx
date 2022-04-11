@@ -67,7 +67,6 @@ class ExternalHeader extends React.Component<ExternalHeaderProps, ExternalHeader
       background: "linear-gradient(#87C6F0, #EFCB8C)",
       color: "transparent",
       backgroundClip: "text",
-      webkitBackgroundClip: "text",
       fontWeight: "bold" as "bold"
     }
 

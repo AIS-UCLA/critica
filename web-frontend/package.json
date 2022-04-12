@@ -8,6 +8,7 @@
     "@innexgo/frontend-auth-api": "^0.2.39",
     "@innexgo/frontend-common": "^0.0.13",
     "@popperjs/core": "^2.11.5",
+    "@react-spring/web": "^9.4.4",
     "@types/node": "^17.0.23",
     "@types/react": "^17.0.43",
     "@types/react-dom": "^17.0.14",

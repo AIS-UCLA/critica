@@ -103,26 +103,6 @@ const ExternalLayout: React.FC<ExternalLayoutProps> = (props) =>
   <>
     <ExternalHeader fixed={props.fixed} transparentTop={props.transparentTop} title={props.branding.name} />
     {props.children}
-    <Navbar bg="dark" variant="dark">
-      <Container>
-        <Navbar.Brand href="#home">
-          <img
-            alt={`${props.branding.name} Logo`}
-            src={props.branding.darkAdaptedIcon}
-            width="30"
-            height="30"
-            className="d-inline-block align-top"
-          />{' '}
-          {props.branding.name}
-        </Navbar.Brand>
-        {props.branding.copyrightOrg ?
-          <Nav className="me-auto">
-            <Nav.Link>&copy; {props.branding.copyrightOrg}, 2021</Nav.Link>
-          </Nav>
-          : false
-        }
-      </Container>
-    </Navbar>
   </>
 
 export default ExternalLayout;

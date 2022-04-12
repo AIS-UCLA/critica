@@ -1,4 +1,5 @@
-import { Row, Container, Col } from 'react-bootstrap';
+import React from 'react';
+import { Row, Col, Container, Card } from 'react-bootstrap';
 import { Async, AsyncProps } from 'react-async';
 import update from 'immutability-helper';
 import { Section, Loader, BrandedComponentProps } from '@innexgo/common-react-components';
@@ -9,6 +10,7 @@ import { ArticleData, ArticleSection, articleDataViewPublic, articleSectionViewP
 import { unwrap, getFirstOr } from '@innexgo/frontend-common';
 import format from 'date-fns/format';
 import formatDistance from 'date-fns/formatDistance';
+import { useSearchParams } from 'react-router-dom'
 
 type Data = {
   articleData: ArticleData,
@@ -39,23 +41,60 @@ const loadData = async (props: AsyncProps<Data>) => {
 type ManageArticleSectionProps = {
   sections: ArticleSection[],
   position: number,
+  setPosition: (a: number) => void
 };
+
 
 function ManageArticleSection(props: ManageArticleSectionProps) {
   // select true sections and sort them
-  let ordered_sections = props.sections.filter(x => x.variant == 0).sort((a, b) => a.position - b.position);
+  let ordered_sections = props.sections.sort((a, b) => a.position - b.position);
 
   // select those sections with a smaller position
-  let visible_ordered_sections = ordered_sections.filter(x => x.position <= props.position);
+  let visible_ordered_sections = ordered_sections.filter(x => x.variant == 0).filter(x => x.position <= props.position);
 
   // select the possible selections for the next one
   let possible_new_sections = ordered_sections.filter(x => x.position === props.position + 1);
 
-  return <div>{visible_ordered_sections.map(x => <p>{x.sectionText}</p>)}</div>
+  return <div>
+    {visible_ordered_sections.map(x => <p key={x.articleSectionId}>{x.sectionText}</p>)}
+    <div className="d-flex flex-wrap">
+      {possible_new_sections.map(s =>
+        <Card
+          key={s.articleSectionId}
+          style={{ width: '15rem' }}
+          className="m-2"
+          onClick={() => {
+            if (s.variant == 0) {
+              props.setPosition(props.position + 1)
+            }
+          }}>
+          <Card.Body>
+            <Card.Text>{s.sectionText}</Card.Text>
+          </Card.Body>
+        </Card>
+      )}
+    </div>
+  </div>
 }
 
 function ArticleView(props: BrandedComponentProps) {
-  const articleId = parseInt(new URLSearchParams(window.location.search).get("articleId") ?? "");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const articleId = parseInt(searchParams.get("articleId") ?? "", 10);
+  const initialPosition = parseInt(searchParams.get("position") ?? "", 10) || 0;
+  const [position, raw_setPosition] = React.useState(initialPosition);
+  const setPosition = (n: number) => {
+    setSearchParams(
+      {
+        articleId: articleId.toString(),
+        position: n.toString(),
+      },
+      {
+        replace: true
+      }
+    );
+    raw_setPosition(n);
+  }
+
   return <ExternalLayout branding={props.branding} fixed={false} transparentTop={true}>
     <Container className="py-4">
       <Async promiseFn={loadData} articleId={articleId}>
@@ -68,7 +107,8 @@ function ArticleView(props: BrandedComponentProps) {
             <Section id="article" name={d.articleData.title}>
               <ManageArticleSection
                 sections={d.articleSection}
-                position={0}
+                position={position}
+                setPosition={setPosition}
               />
             </Section>
           }

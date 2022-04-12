@@ -40,7 +40,7 @@ INSERT INTO article_section(
 -- Article 2 has no completion
 -- Article 3
 -- Section 0
-(1, 1, 0, 0, 'A real start to the paper', TRUE),
+(3, 3, 0, 0, 'A real start to the paper', TRUE),
 -- Section 1
 (3, 3, 1, 0, 'True completion', TRUE),
 (3, 3, 1, 1, 'Fake completion 1', TRUE),

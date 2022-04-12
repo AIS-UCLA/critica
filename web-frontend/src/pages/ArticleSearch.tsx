@@ -26,6 +26,7 @@ const loadData = async (props: AsyncProps<Data>) => {
 
 
 type ResourceCardProps = {
+  className?:string,
   title: string,
   subtitle: string,
   text: string,
@@ -34,7 +35,7 @@ type ResourceCardProps = {
 
 function ResourceCard(props: ResourceCardProps) {
   return (
-    <Card className="h-100" style={{ width: '15rem' }}>
+    <Card style={{ width: '15rem' }} className={props.className}>
       <Card.Body>
         <Card.Title>{props.title}</Card.Title>
         <Card.Subtitle className="text-muted">{props.subtitle}</Card.Subtitle>
@@ -60,14 +61,14 @@ function ArticleSearch(props: BrandedComponentProps) {
               <div className="d-flex flex-wrap">
                 {
                   d.articleData.map(a =>
-                    <div className="p-2">
                       <ResourceCard
+                        key={a.articleDataId}
+                        className="m-2"
                         title={a.title}
                         text={`Approx Length: ${formatDistance(0, a.durationEstimate)}`}
                         subtitle={`Updated ${format(a.creationTime, 'yyyy MMM do')}`}
                         href={`/article_view?articleId=${a.article.articleId}`}
                       />
-                    </div>
                   )
                 }
               </div>}

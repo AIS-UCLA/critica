@@ -57,6 +57,6 @@ create view recent_article_section as
   inner join (
    select max(article_section_id) id 
    from article_section 
-   group by article_id
+   group by article_id, position, variant
   ) maxids
   on maxids.id = a_s.article_section_id;

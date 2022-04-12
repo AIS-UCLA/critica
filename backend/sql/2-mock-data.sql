@@ -37,6 +37,8 @@ INSERT INTO article_section(
 (1, 1, 2, 0, 'Second True completion', TRUE),
 (1, 1, 2, 1, 'Second Fake completion 1', TRUE),
 (1, 1, 2, 2, 'Second Fake completion 2', TRUE),
+(1, 1, 2, 3, 'Second Fake completion 3', TRUE),
+(1, 1, 2, 4, 'Second Fake completion 4', TRUE),
 -- Article 2 has no completion
 -- Article 3
 -- Section 0
@@ -45,6 +47,8 @@ INSERT INTO article_section(
 (3, 3, 1, 0, 'True completion', TRUE),
 (3, 3, 1, 1, 'Fake completion 1', TRUE),
 (3, 3, 1, 2, 'Fake completion 2', TRUE),
+(3, 3, 1, 3, 'Fake completion 3', TRUE),
+(3, 3, 1, 4, 'Fake completion 4', TRUE),
 -- Section 2
 (3, 3, 2, 0, 'Second True completion', TRUE),
 (3, 3, 2, 1, 'Second Fake completion 1', TRUE),

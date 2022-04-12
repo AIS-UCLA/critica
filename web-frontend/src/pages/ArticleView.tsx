@@ -13,62 +13,69 @@ import formatDistance from 'date-fns/formatDistance';
 import { useSearchParams } from 'react-router-dom'
 import { animated, useSprings } from '@react-spring/web'
 
-type ManageArticleSectionProps = {
-  sections: ArticleSection[],
+type SelectedSection = {
+  section: ArticleSection,
+  marked: boolean,
+  selected: boolean
+}
+
+type ManageArticleSectionOptionsProps = {
   position: number,
-  mistakes: number,
-  onFinish: (success: boolean) => void
+  sections: SelectedSection[],
+  setSection: (i: number, s: SelectedSection) => void
 };
 
+function ManageArticleSectionOptions(props: ManageArticleSectionOptionsProps) {
+  const options = props.sections
+    .map((section, originalId) => ({ section, originalId }))
+    .filter(s => s.section.section.position === props.position + 1)
+    .sort((a, b) => a.section.section.sectionText.localeCompare(b.section.section.sectionText));
 
-function ManageArticleSection(props: ManageArticleSectionProps) {
-
-  // select true sections and sort them
-  let ordered_sections = props.sections.sort((a, b) => a.position - b.position);
-
-  // select those sections with a smaller position
-  let visible_ordered_sections = ordered_sections.filter(x => x.variant == 0).filter(x => x.position <= props.position);
-
-  // select the possible selections for the next one
-  let sectionOptions = ordered_sections
-    .filter(x => x.position === props.position + 1)
-    .sort((x, y) => x.sectionText.localeCompare(y.sectionText));
-
-  let [optionMarks, setOptionMarks] = React.useState(new Array(sectionOptions.length).fill(false));
+  const selectedSections = props.sections
+    .filter(s => s.section.variant === 0 && s.section.position <= props.position);
 
   const sectionOptionStyles = useSprings(
-    sectionOptions.length,
-    sectionOptions.map((s, i) =>
-      s.variant === 0
+    options.length,
+    options.map(s =>
+      s.section.section.variant === 0
         ? {
-          pause: !optionMarks[i],
+          reset: !s.section.selected,
+          cancel: !s.section.marked,
+          onRest: () =>
+            props.setSection(s.originalId, update(s.section, { selected: { $set: true } })),
           from: { opacity: 1 },
           to: { opacity: 0 },
-          onRest: () => {
-            props.onFinish(true);
-          }
+
         }
         : {
-          pause: !optionMarks[i],
+          reset: !s.section.selected,
+          cancel: !s.section.marked,
+          onRest: () =>
+            props.setSection(s.originalId, update(s.section, { selected: { $set: true } })),
           config: {
             frequency: 0.1,
             damping: 0.1
           },
-          from: { translateX: 0 },
-          to: { translateX: 10 }
+          from: { translateX: -5 },
+          to: { translateX: 5 }
         }
     )
   )
 
+  console.log(sectionOptionStyles.length);
+
   return <div>
-    {visible_ordered_sections.map(x => <p key={x.articleSectionId}>{x.sectionText}</p>)}
-    <div className="row">
-      {sectionOptions.map((s, i) =>
-        <animated.div style={sectionOptionStyles[i]} className="col-md p-3" key={i} >
+    <div>{selectedSections.map((s, i) => <p key={i} children={s.section.sectionText} />)}</div>
+    <h5 className="pt-5">
+      Pick the true completion of the article:
+    </h5>
+    <div className="row px-5">
+      {options.map((s, i) =>
+        <animated.div style={sectionOptionStyles[i]} className="col-xl p-3" key={i} >
           <Card className="w-100"
             border={
-              optionMarks[i]
-                ? s.variant === 0
+              s.section.marked
+                ? s.section.section.variant === 0
                   ? "success"
                   : "danger"
                 : undefined
@@ -76,24 +83,14 @@ function ManageArticleSection(props: ManageArticleSectionProps) {
           >
             <Card.Body>
               <Card.Text>
-                {s.sectionText}
-                {s.sectionText}
-                {s.sectionText}
-                {s.sectionText}
-                {s.sectionText}
-                {s.sectionText}
-                {s.sectionText}
-                {s.sectionText}
-                {s.sectionText}
-                {s.sectionText}
-                {s.sectionText}
-                {s.sectionText}
-                {s.sectionText}
-                {s.sectionText}
+                {s.section.section.sectionText}
               </Card.Text>
               <Button
                 variant="primary"
-                onClick={() => setOptionMarks(update(optionMarks, { [i]: { $set: true } }))}
+                onClick={() =>
+                  // we mark it, so the animation can run. the animation (once done) selects it
+                  props.setSection(s.originalId, update(s.section, { marked: { $set: true } }))
+                }
               >
                 Choose
               </Button>
@@ -108,13 +105,13 @@ function ManageArticleSection(props: ManageArticleSectionProps) {
 
 type Data = {
   articleData: ArticleData,
-  articleSection: ArticleSection[],
+  sectionData: SelectedSection[],
 }
 
 const loadData = async (props: AsyncProps<Data>) => {
   const articleData =
     await articleDataViewPublic({
-      articleId: [props.articleId]
+      articleId: [props.articleId],
     })
       .then(unwrap)
       .then(x => getFirstOr(x, "NOT_FOUND"))
@@ -122,24 +119,29 @@ const loadData = async (props: AsyncProps<Data>) => {
 
   const articleSection =
     await articleSectionViewPublic({
-      articleId: [props.articleId]
+      articleId: [props.articleId],
     })
       .then(unwrap);
 
   return {
     articleData,
-    articleSection
+    sectionData: articleSection.map(s => ({
+      section: s,
+      marked: false,
+      selected: false
+    }))
   }
 }
 
-function InnerArticleView(props: Data) {
+function ArticleView(props: BrandedComponentProps) {
   const [searchParams, setSearchParams] = useSearchParams();
   const initialPosition = parseInt(searchParams.get("position") ?? "", 10) || 0;
   const [position, raw_setPosition] = React.useState(initialPosition);
+  const articleId = parseInt(searchParams.get("articleId") ?? "", 10);
   const setPosition = (n: number) => {
     setSearchParams(
       {
-        articleId: props.articleData.article.articleId.toString(),
+        articleId: articleId.toString(),
         position: n.toString(),
       },
       {
@@ -149,31 +151,6 @@ function InnerArticleView(props: Data) {
     raw_setPosition(n);
   }
 
-  const [sectionData, setSectionData] = React.useState(
-    props.articleSection.map(s => ({ section: s, viewed: false }))
-  );
-
-  return <Section id="article" name={d.articleData.title}>
-    <ManageArticleSection
-      sectionData={s}
-    position={position}
-    onFinish={success => {
-      setPosition(position + 1);
-      if (!success) {
-        setMistakes(mistakes + 1)
-      }
-    }}
-              />
-  </Section>
-
-}
-
-
-
-function ArticleView(props: BrandedComponentProps) {
-  const [searchParams, _] = useSearchParams();
-  const articleId = parseInt(searchParams.get("articleId") ?? "", 10);
-
   return <ExternalLayout branding={props.branding} fixed={false} transparentTop={true}>
     <Container className="py-4">
       <Async promiseFn={loadData} articleId={articleId}>
@@ -182,7 +159,17 @@ function ArticleView(props: BrandedComponentProps) {
           <Async.Rejected>
             {e => <ErrorMessage error={e} />}
           </Async.Rejected>
-          <Async.Fulfilled<Data>>{d => <InnerArticleView {...d} />} </Async.Fulfilled>
+          <Async.Fulfilled<Data>>{d => <ManageArticleSectionOptions
+            position={position}
+            sections={d.sectionData}
+            setSection={(i, s) => {
+              if (s.section.variant === 0) {
+                setPosition(position + 1);
+              }
+              setData(update(d, { sectionData: { [i]: { $set: s } } }));
+            }}
+          />}
+          </Async.Fulfilled>
         </>}
       </Async>
     </Container>

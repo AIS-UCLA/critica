@@ -31,7 +31,7 @@ function ManageArticleSectionOptions(props: ManageArticleSectionOptionsProps) {
     .filter(s => s.section.section.position === props.position + 1)
     .sort((a, b) => a.section.section.sectionText.localeCompare(b.section.section.sectionText));
 
-  const selectedSections = props.sections
+  const previousSelections = props.sections
     .filter(s => s.section.variant === 0 && s.section.position <= props.position);
 
   const sectionOptionStyles = useSprings(
@@ -62,13 +62,23 @@ function ManageArticleSectionOptions(props: ManageArticleSectionOptionsProps) {
     )
   )
 
-  console.log(sectionOptionStyles.length);
+  const finished = options.length === 0;
+
+  const a = props.sections.filter(x => x.selected
 
   return <div>
-    <div>{selectedSections.map((s, i) => <p key={i} children={s.section.sectionText} />)}</div>
-    <h5 className="pt-5">
+    <div>{previousSelections.map((s, i) => <p key={i} children={s.section.sectionText} />)}</div>
+    <h5 className="pt-5" hidden={finished}>
       Pick the true completion of the article:
     </h5>
+    <div className="pt-5" hidden={!finished}>
+      <h4>
+        Completed Article!
+      </h4>
+      <h6>
+        Accuracy: {sections.filter(}/{previousSelections.length}
+      </h6>
+    </div>
     <div className="row px-5">
       {options.map((s, i) =>
         <animated.div style={sectionOptionStyles[i]} className="col-xl p-3" key={i} >
@@ -87,6 +97,7 @@ function ManageArticleSectionOptions(props: ManageArticleSectionOptionsProps) {
               </Card.Text>
               <Button
                 variant="primary"
+                disabled={s.section.marked}
                 onClick={() =>
                   // we mark it, so the animation can run. the animation (once done) selects it
                   props.setSection(s.originalId, update(s.section, { marked: { $set: true } }))

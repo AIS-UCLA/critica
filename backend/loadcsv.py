@@ -62,6 +62,7 @@ article_data = postJSON(f'{hostname}/critica/article/new',
 
 for position, row in df.iterrows():
   for variant, section_text in enumerate(row):
+      print(f'> Adding variant {variant} at position {position}')
       postJSON(f'{hostname}/critica/article_section/new',
                {
                   'articleId': article_data['article']['articleId'],

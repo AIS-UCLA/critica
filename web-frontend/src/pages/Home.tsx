@@ -3,7 +3,7 @@ import { Container, Button } from 'react-bootstrap';
 import ExternalLayout from '../components/ExternalLayout';
 import { Section, BrandedComponentProps } from '@innexgo/common-react-components';
 
-import lady from '../img/lady_sit.png';
+import criticaWithText from '../img/critica_withtext.png';
 
 function Home(props: BrandedComponentProps) {
 
@@ -65,15 +65,16 @@ function Home(props: BrandedComponentProps) {
     <ExternalLayout branding={props.branding} fixed={true} transparentTop={true}>
       <Container fluid style={jumboStyle}>
 
-        <img src={lady} width="450" height="450" />
+        <img src={criticaWithText} width="450" />
 
         <div style={homeTextStyle}>
           <h1 style={gradText}>{props.branding.tagline}</h1>
           <h5 style={bodyText}>
-            Easily organize and manage your <br />
-            calendar to accomplish long-term goals.
+            Test your critical reading skills by
+            trying to distinguish between GPT3 completed text
+            and the real thing.
           </h5>
-          <Button style={buttonStyle} href="/register"> Get Started → </Button>
+          <Button style={buttonStyle} href="/article_search">Get Started → </Button>
         </div>
       </Container>
 

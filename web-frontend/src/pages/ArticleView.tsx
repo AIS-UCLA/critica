@@ -64,8 +64,6 @@ function ManageArticleSectionOptions(props: ManageArticleSectionOptionsProps) {
 
   const finished = options.length === 0;
 
-  const a = props.sections.filter(x => x.selected
-
   return <div>
     <div>{previousSelections.map((s, i) => <p key={i} children={s.section.sectionText} />)}</div>
     <h5 className="pt-5" hidden={finished}>
@@ -75,9 +73,6 @@ function ManageArticleSectionOptions(props: ManageArticleSectionOptionsProps) {
       <h4>
         Completed Article!
       </h4>
-      <h6>
-        Accuracy: {sections.filter(}/{previousSelections.length}
-      </h6>
     </div>
     <div className="row px-5">
       {options.map((s, i) =>

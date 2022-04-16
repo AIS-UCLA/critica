@@ -24,8 +24,8 @@ import Account from './pages/Account';
 import ArticleSearch from './pages/ArticleSearch';
 import ArticleView from './pages/ArticleView';
 
-import DarkAdaptedIcon from "./img/innexgo_transparent_icon.png";
-import LightAdaptedIcon from "./img/innexgo_onyx_transparent.png";
+import DarkAdaptedIcon from "./img/critica_icon_light.png";
+import LightAdaptedIcon from "./img/critica_icon_dark.png";
 
 // Bootstrap CSS & JS
 import './style/style.scss';

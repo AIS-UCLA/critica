@@ -20,6 +20,7 @@ type SelectedSection = {
 }
 
 type ManageArticleSectionOptionsProps = {
+  articleData: ArticleData,
   position: number,
   sections: SelectedSection[],
   setSection: (i: number, s: SelectedSection) => void
@@ -65,7 +66,10 @@ function ManageArticleSectionOptions(props: ManageArticleSectionOptionsProps) {
   const finished = options.length === 0;
 
   return <div>
-    <div>{previousSelections.map((s, i) => <p key={i} children={s.section.sectionText} />)}</div>
+    <div style={{ maxWidth: "50rem" }} className="mx-auto">
+      <h2>{props.articleData.title}</h2>
+      {previousSelections.map((s, i) => <p key={i} children={s.section.sectionText} />)}
+    </div>
     <h5 className="pt-5" hidden={finished}>
       Pick the true completion of the article:
     </h5>
@@ -166,6 +170,7 @@ function ArticleView(props: BrandedComponentProps) {
             {e => <ErrorMessage error={e} />}
           </Async.Rejected>
           <Async.Fulfilled<Data>>{d => <ManageArticleSectionOptions
+            articleData={d.articleData}
             position={position}
             sections={d.sectionData}
             setSection={(i, s) => {

@@ -83,8 +83,9 @@ export function articleDataNew(props: ArticleDataNewProps, server?:string): Prom
 
 export interface ArticleSectionNewProps {
   articleId: number,
-  startTime: number,
-  endTime: number,
+  position: number,
+  variant: number,
+  sectionText: string,
   active: boolean,
   apiKey: string,
 }

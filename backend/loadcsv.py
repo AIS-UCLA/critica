@@ -52,6 +52,7 @@ hostname = sys.argv[2]
 apiKey = getApiKey(hostname)
 df = pd.read_excel(filepath)
 
+print('===> Adding New Article')
 article_data = postJSON(f'{hostname}/critica/article/new',
                         {
                             'title':prompt('===> Enter Title:'),

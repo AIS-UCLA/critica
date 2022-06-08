@@ -63,42 +63,40 @@ function Home(props: BrandedComponentProps) {
 
   return (
     <ExternalLayout branding={props.branding} fixed={true} transparentTop={true}>
-      <Container fluid style={jumboStyle}>
+      <>
+        <Container fluid style={jumboStyle}>
 
-        <img src={criticaWithText} width="450" />
+          <img src={criticaWithText} width="450" />
 
-        <div style={homeTextStyle}>
-          <h1 style={gradText}>{props.branding.tagline}</h1>
-          <h5 style={bodyText}>
-            Test your critical reading skills by
-            trying to distinguish between GPT3 completed text
-            and the real thing.
-          </h5>
-          <Button style={buttonStyle} href="/article_search">Get Started → </Button>
-        </div>
-      </Container>
-
-
-      <div className="w-100">
-        <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
-          <path d="M985.66,92.83C906.67,72,823.78,31,743.84,14.19c-82.26-17.34-168.06-16.33-250.45.39-57.84,
-            11.73-114,31.07-172,41.86A600.21,600.21,0,0,1,0,27.35V120H1200V95.8C1132.19,118.92,1055.71,111.31,985.66,92.83Z" className="shape-fill" fill="#F6F0E5"></path>
-        </svg>
-      </div>
-
-      <div style={goldBack}>
-
-        <Container style={{ paddingBottom: '30px' }}>
-          <Section id="welcome" name={`Welcome to ${props.branding.name}`} >
-            <div style={{ paddingBottom: '20px' }}>
-              Read better.
-            </div>
-          </Section>
-
-
+          <div style={homeTextStyle}>
+            <h1 style={gradText}>{props.branding.tagline}</h1>
+            <h5 style={bodyText}>
+              Test your critical reading skills by
+              trying to distinguish between GPT3 completed text
+              and the real thing.
+            </h5>
+            <Button style={buttonStyle} href="/article_search">Get Started → </Button>
+          </div>
         </Container>
 
-      </div>
+        <div className="w-100">
+          <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+            <path d="M985.66,92.83C906.67,72,823.78,31,743.84,14.19c-82.26-17.34-168.06-16.33-250.45.39-57.84,
+            11.73-114,31.07-172,41.86A600.21,600.21,0,0,1,0,27.35V120H1200V95.8C1132.19,118.92,1055.71,111.31,985.66,92.83Z" className="shape-fill" fill="#F6F0E5"></path>
+          </svg>
+        </div>
+
+        <div style={goldBack}>
+
+          <Container style={{ paddingBottom: '30px' }}>
+            <Section id="welcome" name={`Welcome to ${props.branding.name}`} >
+              <div style={{ paddingBottom: '20px' }}>
+                Read better.
+              </div>
+            </Section>
+          </Container>
+        </div>
+      </>
     </ExternalLayout>
   )
 }

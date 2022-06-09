@@ -11,12 +11,13 @@ import { unwrap, getFirstOr } from '@innexgo/frontend-common';
 import format from 'date-fns/format';
 import formatDistance from 'date-fns/formatDistance';
 import { useSearchParams } from 'react-router-dom'
-import { animated, useSprings } from '@react-spring/web'
+import { animated, SpringRef, useSprings, useSpringRef } from '@react-spring/web'
 
 type SelectedSection = {
   section: ArticleSection,
-  marked: boolean,
+  marked: boolean
   selected: boolean
+  spring: SpringRef,
 }
 
 type ManageArticleSectionOptionsProps = {
@@ -35,13 +36,14 @@ function ManageArticleSectionOptions(props: ManageArticleSectionOptionsProps) {
   const previousSelections = props.sections
     .filter(s => s.section.variant === 0 && s.section.position <= props.position);
 
+
   const sectionOptionStyles = useSprings(
     options.length,
-    options.map(s =>
+    options.map((s, i) =>
       s.section.section.variant === 0
         ? {
+          ref: s.section.spring,
           reset: !s.section.selected,
-          cancel: !s.section.marked,
           onRest: () =>
             props.setSection(s.originalId, update(s.section, { selected: { $set: true } })),
           from: { opacity: 1 },
@@ -49,10 +51,12 @@ function ManageArticleSectionOptions(props: ManageArticleSectionOptionsProps) {
 
         }
         : {
+          ref: s.section.spring,
           reset: !s.section.selected,
-          cancel: !s.section.marked,
-          onRest: () =>
-            props.setSection(s.originalId, update(s.section, { selected: { $set: true } })),
+          onRest: () => {
+            console.log("i:", i);
+            props.setSection(s.originalId, update(s.section, { selected: { $set: true } }))
+          },
           config: {
             frequency: 0.1,
             damping: 0.1
@@ -137,8 +141,9 @@ const loadData = async (props: AsyncProps<Data>) => {
     articleData,
     sectionData: articleSection.map(s => ({
       section: s,
+      spring: useSpringRef(),
       marked: false,
-      selected: false
+      selected: false,
     }))
   }
 }
@@ -170,6 +175,7 @@ function ArticleView(props: BrandedComponentProps) {
             {e => <ErrorMessage error={e} />}
           </Async.Rejected>
           <Async.Fulfilled<Data>>{d => <ManageArticleSectionOptions
+            key={position}
             articleData={d.articleData}
             position={position}
             sections={d.sectionData}

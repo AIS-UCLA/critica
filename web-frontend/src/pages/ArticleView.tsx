@@ -11,13 +11,82 @@ import { unwrap, getFirstOr } from '@innexgo/frontend-common';
 import format from 'date-fns/format';
 import formatDistance from 'date-fns/formatDistance';
 import { useSearchParams } from 'react-router-dom'
-import { animated, SpringRef, useSprings, useSpringRef } from '@react-spring/web'
+import { animated, Controller } from '@react-spring/web'
 
 type SelectedSection = {
   section: ArticleSection,
   marked: boolean
   selected: boolean
-  spring: SpringRef,
+}
+
+type ManageArticleSectionOptionProps = {
+  articleData: ArticleData,
+  section: SelectedSection,
+  setSection: (s: SelectedSection) => void
+};
+
+class ManageArticleSectionOption extends React.Component<ManageArticleSectionOptionProps, {}>  {
+
+  private controller: Controller<{ opacity: number }> | Controller<{ translateX: number }>;
+
+  constructor(props: ManageArticleSectionOptionProps) {
+    super(props);
+    if (props.section.section.variant === 0) {
+      this.controller = new Controller({
+        from: { opacity: 1 },
+        to: { opacity: 0 }
+      });
+    } else {
+      this.controller = new Controller({
+        config: {
+          frequency: 0.1,
+          damping: 0.1
+        },
+        from: { translateX: -5 },
+        to: { translateX: 5 },
+      })
+    }
+    this.controller.pause();
+  }
+
+  componentDidUpdate() {
+    if (this.props.section.marked) {
+      this.controller.resume();
+      setTimeout(() => {
+        this.props.setSection(update(this.props.section, { selected: { $set: true } }))
+      }, 1000);
+    }
+  }
+
+  render() {
+    return <animated.div style={this.controller.springs} className="col-xl p-3" >
+      <Card className="w-100"
+        border={
+          this.props.section.marked
+            ? this.props.section.section.variant === 0
+              ? "success"
+              : "danger"
+            : undefined
+        }
+      >
+        <Card.Body>
+          <Card.Text>
+            {this.props.section.section.sectionText}
+          </Card.Text>
+          <Button
+            variant="primary"
+            disabled={this.props.section.marked}
+            onClick={() =>
+              // we mark it, so the animation can run. the animation (once done) selects it
+              this.props.setSection(update(this.props.section, { marked: { $set: true } }))
+            }
+          >
+            Choose
+          </Button>
+        </Card.Body>
+      </Card>
+    </animated.div>
+  }
 }
 
 type ManageArticleSectionOptionsProps = {
@@ -27,6 +96,7 @@ type ManageArticleSectionOptionsProps = {
   setSection: (i: number, s: SelectedSection) => void
 };
 
+
 function ManageArticleSectionOptions(props: ManageArticleSectionOptionsProps) {
   const options = props.sections
     .map((section, originalId) => ({ section, originalId }))
@@ -35,37 +105,6 @@ function ManageArticleSectionOptions(props: ManageArticleSectionOptionsProps) {
 
   const previousSelections = props.sections
     .filter(s => s.section.variant === 0 && s.section.position <= props.position);
-
-
-  const sectionOptionStyles = useSprings(
-    options.length,
-    options.map((s, i) =>
-      s.section.section.variant === 0
-        ? {
-          ref: s.section.spring,
-          reset: !s.section.selected,
-          onRest: () =>
-            props.setSection(s.originalId, update(s.section, { selected: { $set: true } })),
-          from: { opacity: 1 },
-          to: { opacity: 0 },
-
-        }
-        : {
-          ref: s.section.spring,
-          reset: !s.section.selected,
-          onRest: () => {
-            console.log("i:", i);
-            props.setSection(s.originalId, update(s.section, { selected: { $set: true } }))
-          },
-          config: {
-            frequency: 0.1,
-            damping: 0.1
-          },
-          from: { translateX: -5 },
-          to: { translateX: 5 }
-        }
-    )
-  )
 
   const finished = options.length === 0;
 
@@ -83,34 +122,13 @@ function ManageArticleSectionOptions(props: ManageArticleSectionOptionsProps) {
       </h4>
     </div>
     <div className="row px-5">
-      {options.map((s, i) =>
-        <animated.div style={sectionOptionStyles[i]} className="col-xl p-3" key={i} >
-          <Card className="w-100"
-            border={
-              s.section.marked
-                ? s.section.section.variant === 0
-                  ? "success"
-                  : "danger"
-                : undefined
-            }
-          >
-            <Card.Body>
-              <Card.Text>
-                {s.section.section.sectionText}
-              </Card.Text>
-              <Button
-                variant="primary"
-                disabled={s.section.marked}
-                onClick={() =>
-                  // we mark it, so the animation can run. the animation (once done) selects it
-                  props.setSection(s.originalId, update(s.section, { marked: { $set: true } }))
-                }
-              >
-                Choose
-              </Button>
-            </Card.Body>
-          </Card>
-        </animated.div>
+      {options.map(s =>
+        <ManageArticleSectionOption
+          key={s.originalId}
+          articleData={props.articleData}
+          section={s.section}
+          setSection={sec => props.setSection(s.originalId, sec)}
+        />
       )}
     </div>
   </div>
@@ -141,7 +159,6 @@ const loadData = async (props: AsyncProps<Data>) => {
     articleData,
     sectionData: articleSection.map(s => ({
       section: s,
-      spring: useSpringRef(),
       marked: false,
       selected: false,
     }))
@@ -180,7 +197,7 @@ function ArticleView(props: BrandedComponentProps) {
             position={position}
             sections={d.sectionData}
             setSection={(i, s) => {
-              if (s.section.variant === 0) {
+              if (s.section.variant === 0 && s.selected) {
                 setPosition(position + 1);
               }
               setData(update(d, { sectionData: { [i]: { $set: s } } }));

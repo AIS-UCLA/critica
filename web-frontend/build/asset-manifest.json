@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/static/css/main.0519a253.css",
-    "main.js": "/static/js/main.edb51017.js",
+    "main.css": "/static/css/main.59cd509b.css",
+    "main.js": "/static/js/main.fc13b6a8.js",
     "static/media/critica_withtext.png": "/static/media/critica_withtext.d34f89bc19f7aabf7a93.png",
     "static/media/ubuntu-latin-300.woff": "/static/media/ubuntu-latin-300.8a517f2712bba8249913.woff",
     "static/media/ubuntu-latin-300italic.woff": "/static/media/ubuntu-latin-300italic.5b545d0e1cbcff11da01.woff",
@@ -22,11 +22,11 @@
     "static/media/critica_icon_dark.png": "/static/media/critica_icon_dark.3a15b76f8785d34e4c4b.png",
     "static/media/critica_icon_light.png": "/static/media/critica_icon_light.0aa13d3d2ef7c3d206f4.png",
     "index.html": "/index.html",
-    "main.0519a253.css.map": "/static/css/main.0519a253.css.map",
-    "main.edb51017.js.map": "/static/js/main.edb51017.js.map"
+    "main.59cd509b.css.map": "/static/css/main.59cd509b.css.map",
+    "main.fc13b6a8.js.map": "/static/js/main.fc13b6a8.js.map"
   },
   "entrypoints": [
-    "static/css/main.0519a253.css",
-    "static/js/main.edb51017.js"
+    "static/css/main.59cd509b.css",
+    "static/js/main.fc13b6a8.js"
   ]
 }

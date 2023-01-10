@@ -1,7 +1,7 @@
 import { Row, Container, Col } from 'react-bootstrap';
 import { Async, AsyncProps } from 'react-async';
 import update from 'immutability-helper';
-import { Loader, Section } from '@innexgo/common-react-components';
+import { Section } from '@innexgo/common-react-components';
 import ErrorMessage from '../components/ErrorMessage';
 import DashboardLayout from '../components/DashboardLayout';
 

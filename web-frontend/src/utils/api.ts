@@ -48,15 +48,18 @@ export type AppErrorCode = typeof AppErrorCodes[number];
 
 async function fetchApiOrNetworkError<T>(url: string, props: object): Promise<Result<T, AppErrorCode>> {
   try {
-    // todo app backend automatically wraps successes with  Ok and errors with Err,
-    // so no need to wrap manually
-    return await fetchApi(url, props);
+    const [code, resp] = await fetchApi(url, props);
+    if (code >= 200 && code < 300) {
+      return { Ok: resp }
+    } else {
+      return { Err: resp }
+    }
   } catch (_) {
     return { Err: "NETWORK" };
   }
 }
 
-const undefToStr= (s:string|undefined) =>
+const undefToStr = (s: string | undefined) =>
   s === undefined ? apiUrl() : s
 
 export interface ArticleNewProps {
@@ -65,7 +68,7 @@ export interface ArticleNewProps {
   apiKey: string,
 }
 
-export function articleNew(props: ArticleNewProps, server?:string): Promise<Result<ArticleData, AppErrorCode>> {
+export function articleNew(props: ArticleNewProps, server?: string): Promise<Result<ArticleData, AppErrorCode>> {
   return fetchApiOrNetworkError(undefToStr(server) + "/critica/article/new", props);
 }
 
@@ -77,7 +80,7 @@ export interface ArticleDataNewProps {
   apiKey: string,
 }
 
-export function articleDataNew(props: ArticleDataNewProps, server?:string): Promise<Result<ArticleData, AppErrorCode>> {
+export function articleDataNew(props: ArticleDataNewProps, server?: string): Promise<Result<ArticleData, AppErrorCode>> {
   return fetchApiOrNetworkError(undefToStr(server) + "/critica/article_data/new", props);
 }
 
@@ -90,7 +93,7 @@ export interface ArticleSectionNewProps {
   apiKey: string,
 }
 
-export function articleSectionNew(props: ArticleSectionNewProps, server?:string): Promise<Result<ArticleSection, AppErrorCode>> {
+export function articleSectionNew(props: ArticleSectionNewProps, server?: string): Promise<Result<ArticleSection, AppErrorCode>> {
   return fetchApiOrNetworkError(undefToStr(server) + "/critica/article_section/new", props);
 }
 
@@ -103,7 +106,7 @@ export interface ArticleViewProps {
   apiKey: string,
 }
 
-export function articleView(props: ArticleViewProps, server?:string): Promise<Result<Article[], AppErrorCode>> {
+export function articleView(props: ArticleViewProps, server?: string): Promise<Result<Article[], AppErrorCode>> {
   return fetchApiOrNetworkError(undefToStr(server) + "/critica/article/view", props);
 }
 
@@ -122,7 +125,7 @@ export interface ArticleDataViewProps {
 }
 
 
-export function articleDataView(props: ArticleDataViewProps, server?:string): Promise<Result<ArticleData[], AppErrorCode>> {
+export function articleDataView(props: ArticleDataViewProps, server?: string): Promise<Result<ArticleData[], AppErrorCode>> {
   return fetchApiOrNetworkError(undefToStr(server) + "/critica/article_data/view", props);
 }
 
@@ -139,7 +142,7 @@ export interface ArticleSectionViewProps {
   apiKey: string,
 }
 
-export function articleSectionView(props: ArticleSectionViewProps, server?:string): Promise<Result<ArticleSection[], AppErrorCode>> {
+export function articleSectionView(props: ArticleSectionViewProps, server?: string): Promise<Result<ArticleSection[], AppErrorCode>> {
   return fetchApiOrNetworkError(undefToStr(server) + "/critica/article_section/view", props);
 }
 
@@ -154,7 +157,7 @@ export interface ArticleDataViewPublicProps {
   maxDurationEstimate?: number,
 }
 
-export function articleDataViewPublic(props: ArticleDataViewPublicProps, server?:string): Promise<Result<ArticleData[], AppErrorCode>> {
+export function articleDataViewPublic(props: ArticleDataViewPublicProps, server?: string): Promise<Result<ArticleData[], AppErrorCode>> {
   return fetchApiOrNetworkError(undefToStr(server) + "/critica/article_data/view_public", props);
 }
 
@@ -168,7 +171,7 @@ export interface ArticleSectionViewPublicProps {
   variant?: number[],
 }
 
-export function articleSectionViewPublic(props: ArticleSectionViewPublicProps, server?:string): Promise<Result<ArticleSection[], AppErrorCode>> {
+export function articleSectionViewPublic(props: ArticleSectionViewPublicProps, server?: string): Promise<Result<ArticleSection[], AppErrorCode>> {
   return fetchApiOrNetworkError(undefToStr(server) + "/critica/article_section/view_public", props);
 }
 

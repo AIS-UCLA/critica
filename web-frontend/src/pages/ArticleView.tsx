@@ -1,8 +1,8 @@
 import React from 'react';
-import { Button, Container, Card } from 'react-bootstrap';
+import { Button, Container, Card, Spinner } from 'react-bootstrap';
 import { Async, AsyncProps } from 'react-async';
 import update from 'immutability-helper';
-import { Section, Loader, BrandedComponentProps } from '@innexgo/common-react-components';
+import { Section, BrandedComponentProps } from '@innexgo/common-react-components';
 import ErrorMessage from '../components/ErrorMessage';
 import ExternalLayout from '../components/ExternalLayout';
 
@@ -187,7 +187,11 @@ function ArticleView(props: BrandedComponentProps) {
     <Container className="py-4">
       <Async promiseFn={loadData} articleId={articleId}>
         {({ setData }) => <>
-          <Async.Pending><Loader /></Async.Pending>
+          <Async.Pending>
+            <Spinner animation="border" role="status">
+              <span className="visually-hidden">Loading...</span>
+            </Spinner>
+          </Async.Pending>
           <Async.Rejected>
             {e => <ErrorMessage error={e} />}
           </Async.Rejected>

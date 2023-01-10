@@ -1,7 +1,7 @@
-import { Card, Row, Container, Col } from 'react-bootstrap';
+import { Card, Row, Container, Col, Spinner } from 'react-bootstrap';
 import { Async, AsyncProps } from 'react-async';
 import update from 'immutability-helper';
-import { Section, Loader, BrandedComponentProps } from '@innexgo/common-react-components';
+import { Section, BrandedComponentProps } from '@innexgo/common-react-components';
 import ErrorMessage from '../components/ErrorMessage';
 import ExternalLayout from '../components/ExternalLayout';
 
@@ -26,7 +26,7 @@ const loadData = async (props: AsyncProps<Data>) => {
 
 
 type ResourceCardProps = {
-  className?:string,
+  className?: string,
   title: string,
   subtitle: string,
   text: string,
@@ -53,7 +53,11 @@ function ArticleSearch(props: BrandedComponentProps) {
       <Section id="goalIntents" name="Articles">
         <Async promiseFn={loadData}>
           {({ setData }) => <>
-            <Async.Pending><Loader /></Async.Pending>
+            <Async.Pending>
+              <Spinner animation="border" role="status">
+                <span className="visually-hidden">Loading...</span>
+              </Spinner>
+            </Async.Pending>
             <Async.Rejected>
               {e => <ErrorMessage error={e} />}
             </Async.Rejected>
@@ -61,14 +65,14 @@ function ArticleSearch(props: BrandedComponentProps) {
               <div className="d-flex flex-wrap">
                 {
                   d.articleData.map(a =>
-                      <ResourceCard
-                        key={a.articleDataId}
-                        className="m-2"
-                        title={a.title}
-                        text={`Approx Length: ${formatDistance(0, a.durationEstimate)}`}
-                        subtitle={`Updated ${format(a.creationTime, 'yyyy MMM do')}`}
-                        href={`/article_view?articleId=${a.article.articleId}`}
-                      />
+                    <ResourceCard
+                      key={a.articleDataId}
+                      className="m-2"
+                      title={a.title}
+                      text={`Approx Length: ${formatDistance(0, a.durationEstimate)}`}
+                      subtitle={`Updated ${format(a.creationTime, 'yyyy MMM do')}`}
+                      href={`/article_view?articleId=${a.article.articleId}`}
+                    />
                   )
                 }
               </div>}

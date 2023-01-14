@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@innexgo/auth-react-components": "0.1.46",
-    "@innexgo/common-react-components": "^0.1.19",
-    "@innexgo/frontend-auth-api": "^0.2.47",
+    "@innexgo/auth-react-components": "0.1.56",
+    "@innexgo/common-react-components": "^0.1.21",
+    "@innexgo/frontend-auth-api": "^0.2.48",
     "@innexgo/frontend-common": "^0.0.16",
     "@popperjs/core": "^2.11.6",
     "@react-spring/web": "^9.6.1",

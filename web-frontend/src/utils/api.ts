@@ -1,5 +1,21 @@
 import { fetchApi, Result, apiUrl } from '@innexgo/frontend-common'
 
+export interface Info {
+  service: string,
+  versionMajor: number,
+  versionMinor: number,
+  versionRev: number,
+  siteExternalUrl: string,
+  authServiceExternalUrl: string,
+}
+
+export interface Article {
+  articleId: number,
+  creationTime: number,
+  creatorUserId: number,
+}
+
+
 export interface Article {
   articleId: number,
   creationTime: number,
@@ -61,6 +77,10 @@ async function fetchApiOrNetworkError<T>(url: string, props: object): Promise<Re
 
 const undefToStr = (s: string | undefined) =>
   s === undefined ? apiUrl() : s
+
+export function info(server?: string): Promise<Result<Info, AppErrorCode>> {
+  return fetchApiOrNetworkError(undefToStr(server) + "/critica/info", {});
+}
 
 export interface ArticleNewProps {
   title: string,

@@ -112,6 +112,23 @@ pub async fn get_user_if_api_key_valid(
     .map_err(report_auth_err)
 }
 
+pub async fn info(
+    config: Config,
+    _db: Db,
+    auth_service: AuthService,
+) -> Result<response::Info, response::AppError> {
+    let auth_info = auth_service.info().await.map_err(report_auth_err)?;
+    Ok(response::Info {
+        service: crate::SERVICE_NAME.into(),
+        version_major: 0,
+        version_minor: 0,
+        version_rev: 1,
+        site_external_url: config.site_external_url,
+        auth_service_external_url: auth_info.site_external_url,
+    })
+}
+
+
 pub async fn article_new(
   _config: Config,
   db: Db,

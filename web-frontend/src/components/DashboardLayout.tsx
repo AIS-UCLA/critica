@@ -8,8 +8,8 @@ import {
 } from 'react-bootstrap-icons';
 import { InnerLayout, AuthenticatedComponentProps } from '@innexgo/auth-react-components';
 
-export default function DashboardLayout(props: React.PropsWithChildren<AuthenticatedComponentProps & { authServerUrl: string }>) {
-  return <InnerLayout apiKey={props.apiKey} logoutCallback={() => props.setApiKey(null)} authServerApiUrl={`${props.authServerUrl}/api/`}>
+export default function DashboardLayout(props: React.PropsWithChildren<AuthenticatedComponentProps & { authPubApiHref: string }>) {
+  return <InnerLayout apiKey={props.apiKey} logoutCallback={() => props.setApiKey(null)} authPubApiHref={props.authPubApiHref}>
     <InnerLayout.SidebarEntry label="Dashboard" icon={DashboardIcon} href="/dashboard" />
     <InnerLayout.SidebarEntry label="Search" icon={SearchIcon} href="/user_article_search" />
     <InnerLayout.SidebarEntry label="Account" icon={AccountIcon} href="/account" />
